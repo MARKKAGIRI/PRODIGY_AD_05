@@ -1,6 +1,6 @@
 import {Camera, CameraView, useCameraPermissions} from "expo-camera" 
-import { StyleSheet, Text, View, Button, Linking } from 'react-native';
-import{useState, useEffect} from 'react'
+import { StyleSheet, Text, View, Button, Linking, TouchableOpacity } from 'react-native';
+import{useState, } from 'react'
 
 
 export default function Home() {
@@ -20,22 +20,22 @@ export default function Home() {
     }
     return (
         <View style={styles.container}>
-        <CameraView
-            style={StyleSheet.absoluteFillObject}
-            facing="back"
-            onBarcodeScanned={(data) =>{
-              setData(data.data)
-              Linking.openURL(data.data)
-
-            }}
-            BarcodeBounds
-        />
-        <Text style={styles.BtnText}>{data}</Text>
+          <CameraView
+              style={StyleSheet.absoluteFillObject}
+              facing="back"
+              onBarcodeScanned={(data) =>{
+                setData(data.data)
+              }}
+          />
+        
+        
+          <Text 
+          onPress={() => Linking.openURL(data)}
+          style={styles.BtnText}>
+            {data}
+          </Text>
         </View>
     );
-
-
-  
 }
 
 const styles = StyleSheet.create({
@@ -51,7 +51,17 @@ const styles = StyleSheet.create({
     color: 'blue',
     bottom: 180,
     backgroundColor: 'white',
+    borderRadius: 4,
+    padding: 4
+  },
+  buttonArea:{
+    backgroundColor: "grey",
+    display: 'flex',
+    alignItems: 'center',
+    position: 'static',
     padding: 4,
-    borderRadius: 4
+    height: 45,
+    width: "80%",
+    bottom: 20,
   }
-});
+})
