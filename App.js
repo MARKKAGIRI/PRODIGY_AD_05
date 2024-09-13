@@ -27,8 +27,6 @@ export default function Home() {
                 setData(data.data)
               }}
           />
-        
-        
           <Text 
           onPress={() => Linking.openURL(data)}
           style={styles.BtnText}>
