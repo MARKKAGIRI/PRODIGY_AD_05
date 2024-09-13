@@ -1,22 +1,55 @@
-import { StatusBar } from 'expo-status-bar';
-import { createNativeStackNavigator} from '@react-navigation/native-stack'
-import {NavigationContainer} from '@react-navigation/native'
-import Home from './screens/Home';
-import Scanner from './screens/Scanner';
 import {CameraView, useCameraPermissions} from "expo-camera" 
+import { StyleSheet, Text, View, Button } from 'react-native';
+import{useState} from 'react'
 
 
-export default function App() {
-  const Stack = createNativeStackNavigator()
+export default function Home({navigation}) {
+    const [permission, requestPermission] = useCameraPermissions()
+    const isPermissionGranted = Boolean(permission?.granted)
+    const [data , setData] = useState("SCAN SOMETHING")
 
-  return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name='Home' component={Home} options={{headerShown: false}} />
-        </Stack.Navigator>
-      </NavigationContainer>
 
-      
-  );
+    if (!isPermissionGranted) {
+      // Camera permissions are not granted yet.
+      return (
+        <View style={styles.container}>
+          <Text style={styles.message}>We need your permission to show the camera</Text>
+          <Button onPress={requestPermission} title="grant permission" />
+        </View>
+      );
+    }
+    return (
+        <View style={styles.container}>
+        <CameraView
+            style={StyleSheet.absoluteFillObject}
+            facing="back"
+            onBarcodeScanned={(data) =>{
+              setData(data.data)
+            }}
+            BarcodeBounds
+        />
+        <Text style={styles.BtnText}>{data}</Text>
+        </View>
+    );
+
+
   
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  BtnText:{
+    fontSize: 20,
+    position: 'static',
+    color: 'blue',
+    bottom: 180,
+    backgroundColor: 'white',
+    padding: 4,
+    borderRadius: 4
+  }
+});
