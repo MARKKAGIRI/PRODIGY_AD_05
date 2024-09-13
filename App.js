@@ -1,9 +1,9 @@
-import {CameraView, useCameraPermissions} from "expo-camera" 
-import { StyleSheet, Text, View, Button } from 'react-native';
-import{useState} from 'react'
+import {Camera, CameraView, useCameraPermissions} from "expo-camera" 
+import { StyleSheet, Text, View, Button, Linking } from 'react-native';
+import{useState, useEffect} from 'react'
 
 
-export default function Home({navigation}) {
+export default function Home() {
     const [permission, requestPermission] = useCameraPermissions()
     const isPermissionGranted = Boolean(permission?.granted)
     const [data , setData] = useState("SCAN SOMETHING")
@@ -25,6 +25,8 @@ export default function Home({navigation}) {
             facing="back"
             onBarcodeScanned={(data) =>{
               setData(data.data)
+              Linking.openURL(data.data)
+
             }}
             BarcodeBounds
         />
